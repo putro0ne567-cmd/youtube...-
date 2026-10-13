@@ -30,14 +30,33 @@ jobs:
         echo "2. Menata file kode mentah Kotlin..."
         mv *.kt app/src/main/java/com/example/mykotlinapp/ 2>/dev/null || true
         
-        echo "3. Menata Resource dan Manifest..."
+        echo "3. Menata Resource..."
         mv colors.xml strings.xml themes.xml app/src/main/res/values/ 2>/dev/null || true
-        mv AndroidManifest.xml app/src/main/ 2>/dev/null || true
 
-        echo "4. Membersihkan file sampah/ikon yang bentrok..."
+        echo "4. Membersihkan file manifest lama yang rusak..."
+        rm -f AndroidManifest.xml app/src/main/AndroidManifest.xml
         rm -f ic_launcher.xml ic_launcher_foreground.xml ic_stat_nj.xml build.gradle.kts settings.gradle.kts app-build.gradle.kts root-build.gradle.kts build.gradle settings.gradle app/build.gradle
 
-        echo "5. Membuat file settings.gradle root yang valid..."
+        echo "5. Membuat AndroidManifest.xml yang murni dan valid..."
+        echo '<?xml version="1.0" encoding="utf-8"?>' > app/src/main/AndroidManifest.xml
+        echo '<manifest xmlns:android="http://android.com">' >> app/src/main/AndroidManifest.xml
+        echo '    <application' >> app/src/main/AndroidManifest.xml
+        echo '        android:allowBackup="true"' >> app/src/main/AndroidManifest.xml
+        echo '        android:label="MyKotlinApp"' >> app/src/main/AndroidManifest.xml
+        echo '        android:supportsRtl="true">' >> app/src/main/AndroidManifest.xml
+        echo '        <activity' >> app/src/main/AndroidManifest.xml
+        echo '            android:name="com.example.mykotlinapp.MainActivity"' >> app/src/main/AndroidManifest.xml
+        echo '            android:theme="@android:style/Theme.Material.Light.NoActionBar"' >> app/src/main/AndroidManifest.xml
+        echo '            android:exported="true">' >> app/src/main/AndroidManifest.xml
+        echo '            <intent-filter>' >> app/src/main/AndroidManifest.xml
+        echo '                <action android:name="android.intent.action.MAIN" />' >> app/src/main/AndroidManifest.xml
+        echo '                <category android:name="android.intent.category.LAUNCHER" />' >> app/src/main/AndroidManifest.xml
+        echo '            </intent-filter>' >> app/src/main/AndroidManifest.xml
+        echo '        </activity>' >> app/src/main/AndroidManifest.xml
+        echo '    </application>' >> app/src/main/AndroidManifest.xml
+        echo '</manifest>' >> app/src/main/AndroidManifest.xml
+
+        echo "6. Membuat file settings.gradle root..."
         cat << 'EOF' > settings.gradle
         pluginManagement {
             repositories {
@@ -57,7 +76,7 @@ jobs:
         include ':app'
         EOF
 
-        echo "6. Membuat file build.gradle root yang valid..."
+        echo "7. Membuat file build.gradle root..."
         cat << 'EOF' > build.gradle
         plugins {
             id 'com.android.application' version '8.1.1' apply false
@@ -65,7 +84,7 @@ jobs:
         }
         EOF
 
-        echo "7. Membuat file build.gradle tingkat aplikasi (app/build.gradle) untuk Jetpack Compose..."
+        echo "8. Membuat file app/build.gradle..."
         cat << 'EOF' > app/build.gradle
         plugins {
             id 'com.android.application'
