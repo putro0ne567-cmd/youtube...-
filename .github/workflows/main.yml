@@ -3,6 +3,8 @@ name: Generate Android APK
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -19,9 +21,15 @@ jobs:
         java-version: '17'
 
     - name: Setup Gradle
-      uses: gradle/gradle-command-action@v2
-      with:
-        arguments: assembleDebug
+      uses: gradle/actions/setup-gradle@v4
+
+    - name: Generate Gradle Wrapper
+      run: gradle wrapper --gradle-version 8.1.1
+
+    - name: Build Android Project
+      run: |
+        chmod +x gradlew
+        ./gradlew assembleDebug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
