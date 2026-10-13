@@ -34,28 +34,7 @@ jobs:
         mv colors.xml strings.xml themes.xml app/src/main/res/values/ 2>/dev/null || true
 
         echo "Menghapus file ikon XML eksternal..."
-        rm -f ic_launcher.xml ic_launcher_foreground.xml ic_stat_nj.xml AndroidManifest.xml
-
-        echo "Membuat AndroidManifest.xml dengan schema resmi..."
-        cat << 'EOF' > app/src/main/AndroidManifest.xml
-        <?xml version="1.0" encoding="utf-8"?>
-        <manifest xmlns:android="http://android.com">
-            <application
-                android:allowBackup="true"
-                android:label="MyKotlinApp"
-                android:supportsRtl="true">
-                <activity
-                    android:name="com.example.mykotlinapp.MainActivity"
-                    android:theme="@android:style/Theme.Material.Light.NoActionBar"
-                    android:exported="true">
-                    <intent-filter>
-                        <action android:name="android.intent.action.MAIN" />
-                        <category android:name="android.intent.category.LAUNCHER" />
-                    </intent-filter>
-                </activity>
-            </application>
-        </manifest>
-        EOF
+        rm -f ic_launcher.xml ic_launcher_foreground.xml ic_stat_nj.xml
 
         echo "Menata file konfigurasi Gradle utama..."
         rm -f build.gradle.kts settings.gradle.kts app-build.gradle.kts root-build.gradle.kts
