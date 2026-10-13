@@ -37,31 +37,8 @@ jobs:
         rm -f AndroidManifest.xml app/src/main/AndroidManifest.xml
         rm -f ic_launcher.xml ic_launcher_foreground.xml ic_stat_nj.xml build.gradle.kts settings.gradle.kts app-build.gradle.kts root-build.gradle.kts build.gradle settings.gradle app/build.gradle
 
-        echo "5. Mengunduh Manifest Murni Resmi anti-eror..."
-        curl -s https://github.com -o app/src/main/AndroidManifest.xml || true
-        
-        # Jaga-jaga jika unduhan gagal, buat cadangan dengan string aman terbungkus
-        if [ ! -s app/src/main/AndroidManifest.xml ]; then
-          cat << 'MANIFEST_EOF' > app/src/main/AndroidManifest.xml
-        <?xml version="1.0" encoding="utf-8"?>
-        <manifest xmlns:android="http://android.com">
-            <application
-                android:allowBackup="true"
-                android:label="MyKotlinApp"
-                android:supportsRtl="true">
-                <activity
-                    android:name="com.example.mykotlinapp.MainActivity"
-                    android:theme="@android:style/Theme.Material.Light.NoActionBar"
-                    android:exported="true">
-                    <intent-filter>
-                        <action android:name="android.intent.action.MAIN" />
-                        <category android:name="android.intent.category.LAUNCHER" />
-                    </intent-filter>
-                </activity>
-            </application>
-        </manifest>
-        MANIFEST_EOF
-        fi
+        echo "5. Membuat AndroidManifest.xml dengan metode satu baris aman..."
+        echo '<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://android.com"><application android:allowBackup="true" android:label="MyKotlinApp" android:supportsRtl="true"><activity android:name="com.example.mykotlinapp.MainActivity" android:theme="@android:style/Theme.Material.Light.NoActionBar" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter></activity></application></manifest>' > app/src/main/AndroidManifest.xml
 
         echo "6. Membuat file settings.gradle root..."
         cat << 'EOF' > settings.gradle
