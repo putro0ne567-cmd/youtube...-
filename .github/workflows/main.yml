@@ -20,30 +20,101 @@ jobs:
         distribution: 'zulu'
         java-version: '17'
 
-    - name: Fix Project Structure Automatically
+    - name: Complete Project Environment Setup
       run: |
-        echo "Membuat struktur folder Android standar..."
+        echo "1. Membuat struktur folder Android standar..."
         mkdir -p app/src/main/java/com/example/mykotlinapp
         mkdir -p app/src/main/res/values
         mkdir -p gradle/wrapper
 
-        echo "Memindahkan file kode Kotlin..."
+        echo "2. Menata file kode mentah Kotlin..."
         mv *.kt app/src/main/java/com/example/mykotlinapp/ 2>/dev/null || true
         
-        echo "Memindahkan Resource..."
+        echo "3. Menata Resource dan Manifest..."
         mv colors.xml strings.xml themes.xml app/src/main/res/values/ 2>/dev/null || true
+        mv AndroidManifest.xml app/src/main/ 2>/dev/null || true
 
-        echo "Menghapus file ikon XML eksternal..."
-        rm -f ic_launcher.xml ic_launcher_foreground.xml ic_stat_nj.xml
+        echo "4. Membersihkan file sampah/ikon yang bentrok..."
+        rm -f ic_launcher.xml ic_launcher_foreground.xml ic_stat_nj.xml build.gradle.kts settings.gradle.kts app-build.gradle.kts root-build.gradle.kts build.gradle settings.gradle app/build.gradle
 
-        echo "Menata file konfigurasi Gradle utama..."
-        rm -f build.gradle.kts settings.gradle.kts app-build.gradle.kts root-build.gradle.kts
-        
-        if [ -f "app/build.gradle" ]; then
-          echo "build.gradle aplikasi sudah ada di folder app."
-        else
-          mv build.gradle app/ 2>/dev/null || true
-        fi
+        echo "5. Membuat file settings.gradle root yang valid..."
+        cat << 'EOF' > settings.gradle
+        pluginManagement {
+            repositories {
+                google()
+                mavenCentral()
+                gradlePluginPortal()
+            }
+        }
+        dependencyResolutionManagement {
+            repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+            repositories {
+                google()
+                mavenCentral()
+            }
+        }
+        rootProject.name = "MyKotlinApp"
+        include ':app'
+        EOF
+
+        echo "6. Membuat file build.gradle root yang valid..."
+        cat << 'EOF' > build.gradle
+        plugins {
+            id 'com.android.application' version '8.1.1' apply false
+            id 'org.jetbrains.kotlin.android' version '1.8.10' apply false
+        }
+        EOF
+
+        echo "7. Membuat file build.gradle tingkat aplikasi (app/build.gradle) untuk Jetpack Compose..."
+        cat << 'EOF' > app/build.gradle
+        plugins {
+            id 'com.android.application'
+            id 'org.jetbrains.kotlin.android'
+        }
+
+        android {
+            namespace 'com.example.mykotlinapp'
+            compileSdk 33
+
+            defaultConfig {
+                applicationId "com.example.mykotlinapp"
+                minSdk 24
+                targetSdk 33
+                versionCode 1
+                versionName "1.0"
+            }
+
+            buildTypes {
+                release {
+                    minifyEnabled false
+                }
+            }
+            compileOptions {
+                sourceCompatibility JavaVersion.VERSION_17
+                targetCompatibility JavaVersion.VERSION_17
+            }
+            kotlinOptions {
+                jvmTarget = '17'
+            }
+            buildFeatures {
+                compose true
+            }
+            composeOptions {
+                kotlinCompilerExtensionVersion '1.4.3'
+            }
+        }
+
+        dependencies {
+            implementation 'androidx.core:core-ktx:1.10.1'
+            implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+            implementation 'androidx.activity:activity-compose:1.7.2'
+            implementation platform('androidx.compose:compose-bom:2023.05.01')
+            implementation 'androidx.compose.ui:ui'
+            implementation 'androidx.compose.ui:ui-graphics'
+            implementation 'androidx.compose.ui:ui-tooling-preview'
+            implementation 'androidx.compose.material3:material3'
+        }
+        EOF
 
     - name: Setup Gradle Build Environment
       uses: gradle/actions/setup-gradle@v4
