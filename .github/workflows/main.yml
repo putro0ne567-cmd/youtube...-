@@ -30,12 +30,31 @@ jobs:
         echo "Memindahkan file kode Kotlin..."
         mv *.kt app/src/main/java/com/example/mykotlinapp/ 2>/dev/null || true
         
-        echo "Memindahkan Manifest dan Resource..."
-        mv AndroidManifest.xml app/src/main/ 2>/dev/null || true
+        echo "Memindahkan Resource..."
         mv colors.xml strings.xml themes.xml app/src/main/res/values/ 2>/dev/null || true
 
-        echo "Menghapus file ikon XML eksternal yang menyebabkan eror kompilasi..."
-        rm -f ic_launcher.xml ic_launcher_foreground.xml ic_stat_nj.xml
+        echo "Menghapus file ikon XML eksternal..."
+        rm -f ic_launcher.xml ic_launcher_foreground.xml ic_stat_nj.xml AndroidManifest.xml
+
+        echo "Membuat AndroidManifest.xml baru yang bersih..."
+        cat << 'EOF' > app/src/main/AndroidManifest.xml
+        <?xml version="1.0" encoding="utf-8"?>
+        <manifest xmlns:android="http://android.com">
+            <application
+                android:allowBackup="true"
+                android:label="MyKotlinApp"
+                android:supportsRtl="true">
+                <activity
+                    android:name="com.example.mykotlinapp.MainActivity"
+                    android:exported="true">
+                    <intent-filter>
+                        <action android:name="android.intent.action.MAIN" />
+                        <category android:name="android.intent.category.LAUNCHER" />
+                    </intent-filter>
+                </activity>
+            </application>
+        </manifest>
+        EOF
 
         echo "Menata file konfigurasi Gradle utama..."
         rm -f build.gradle.kts settings.gradle.kts app-build.gradle.kts root-build.gradle.kts
