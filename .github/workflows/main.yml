@@ -1,4 +1,4 @@
-name: Android & Kotlin Build
+name: Kotlin Manual Build
 
 on:
   push:
@@ -20,15 +20,15 @@ jobs:
         distribution: 'zulu'
         java-version: '17'
 
-    - name: Make Gradle Executable
-      run: chmod +x gradlew
-      continue-on-error: true
-
-    - name: Build Project
+    - name: Install Kotlin Compiler
       run: |
-        if [ -f "./gradlew" ]; then
-          ./gradlew build
-        else
-          echo "File gradlew tidak ditemukan. Jika ini bukan proyek Gradle, jalankan perintah compiler Anda di sini."
-        fi
+        sudo snap install --classic kotlin
+
+    - name: Compile Kotlin Files
+      run: |
+        kotlinc MainActivity.kt ChannelProcessor.kt ChannelSettings.kt DspViewModel.kt FilterChain.kt -include-runtime -d app.jar
+
+    - name: Run Application Check
+      run: |
+        java -jar app.jar
         
