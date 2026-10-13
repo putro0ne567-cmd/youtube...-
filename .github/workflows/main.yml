@@ -20,12 +20,8 @@ jobs:
         distribution: 'zulu'
         java-version: '17'
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-
     - name: Build Android Project
       run: |
-        # Mencari di mana file gradlew berada dan berpindah ke folder tersebut
         GRADLEW_PATH=$(find . -name gradlew -print -quit)
         if [ -n "$GRADLEW_PATH" ]; then
           cd $(dirname "$GRADLEW_PATH")
