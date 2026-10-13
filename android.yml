@@ -1,0 +1,26 @@
+# Stereo DSP (Android)
+
+Pemutar file audio dengan prosesor DSP stereo. Kanal **L** dan **R** punya pengaturan sendiri-sendiri.
+
+## Fitur per kanal
+- **EQ parametrik 10 band**: tipe Peak / Low shelf / High shelf, frekuensi 20 Hz-20 kHz, gain ±18 dB, Q 0,2-10
+- **HPF** dan **LPF** (20 Hz-20 kHz) Butterworth dengan slope 6 / 12 / 18 / 24 / 36 / 48 dB/oktaf
+- **Gain** -24 s/d +12 dB
+- **Polaritas** (balik fase 180°)
+- **Mute** terpisah untuk L dan R
+- **Efek untuk semua aplikasi** (YouTube dll.) lewat DynamicsProcessing pada session 0, dijaga foreground service
+- Tombol **Salin ke R/L** dan sakelar **Link L/R** (opsional, default mati)
+- Grafik respons frekuensi + meter puncak L/R
+
+Urutan pemrosesan tiap kanal: polaritas → gain → HPF → LPF → EQ.
+
+## Cara build
+1. Buka folder ini di **Android Studio** (Ladybug atau lebih baru). Gradle wrapper dibuat otomatis saat sync.
+2. Jalankan di perangkat/emulator (minSdk 26).
+3. Tekan **Buka**, pilih file audio (MP3, AAC, FLAC, OGG, WAV, dll.), pengaturan langsung terdengar saat digeser.
+
+## Struktur
+- `dsp/` Biquad (RBJ), rantai filter, prosesor per kanal, model pengaturan
+- `audio/AudioEngine.kt` dekode MediaCodec → proses L/R → AudioTrack stereo 16-bit
+- `data/SettingsStore.kt` penyimpanan pengaturan terakhir dan status mute
+- `ui/StereoDspApp.kt` UI Jetpack Compose

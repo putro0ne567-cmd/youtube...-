@@ -1,0 +1,3 @@
+<resources>
+    <style name="Theme.StereoDSP" parent="android:Theme.Material.NoActionBar" />
+</resources>

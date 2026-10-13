@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ikon notifikasi "NJ" (siluet putih). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <group android:translateX="-20" android:translateY="-22">
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M24,34 H31 L45,56 V34 H52 V74 H45 L31,52 V74 H24 Z" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M64,34 H80 V60 Q80,74 69,74 Q58,74 58,62 H65 Q65,67.5 69,67.5 Q73,67.5 73,60 V40 H64 Z" />
+    </group>
+</vector>
