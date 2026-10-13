@@ -36,7 +36,7 @@ jobs:
         echo "Menghapus file ikon XML eksternal..."
         rm -f ic_launcher.xml ic_launcher_foreground.xml ic_stat_nj.xml AndroidManifest.xml
 
-        echo "Membuat AndroidManifest.xml baru yang bersih..."
+        echo "Membuat AndroidManifest.xml standar Android..."
         cat << 'EOF' > app/src/main/AndroidManifest.xml
         <?xml version="1.0" encoding="utf-8"?>
         <manifest xmlns:android="http://android.com">
@@ -46,6 +46,7 @@ jobs:
                 android:supportsRtl="true">
                 <activity
                     android:name="com.example.mykotlinapp.MainActivity"
+                    android:theme="@android:style/Theme.Material.Light.NoActionBar"
                     android:exported="true">
                     <intent-filter>
                         <action android:name="android.intent.action.MAIN" />
