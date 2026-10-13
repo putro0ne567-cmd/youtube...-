@@ -36,7 +36,7 @@ jobs:
         echo "Menghapus file ikon XML eksternal..."
         rm -f ic_launcher.xml ic_launcher_foreground.xml ic_stat_nj.xml AndroidManifest.xml
 
-        echo "Membuat AndroidManifest.xml standar Android..."
+        echo "Membuat AndroidManifest.xml dengan schema resmi..."
         cat << 'EOF' > app/src/main/AndroidManifest.xml
         <?xml version="1.0" encoding="utf-8"?>
         <manifest xmlns:android="http://android.com">
