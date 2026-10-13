@@ -1,4 +1,4 @@
-name: Kotlin Manual Build
+name: Android Jetpack Compose Build
 
 on:
   push:
@@ -20,15 +20,20 @@ jobs:
         distribution: 'zulu'
         java-version: '17'
 
-    - name: Install Kotlin Compiler
-      run: |
-        sudo snap install --classic kotlin
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
 
-    - name: Compile Kotlin Files
+    - name: Build Android Project
       run: |
-        kotlinc MainActivity.kt ChannelProcessor.kt ChannelSettings.kt DspViewModel.kt FilterChain.kt -include-runtime -d app.jar
-
-    - name: Run Application Check
-      run: |
-        java -jar app.jar
+        # Mencari di mana file gradlew berada dan berpindah ke folder tersebut
+        GRADLEW_PATH=$(find . -name gradlew -print -quit)
+        if [ -n "$GRADLEW_PATH" ]; then
+          cd $(dirname "$GRADLEW_PATH")
+          chmod +x gradlew
+          ./gradlew assembleDebug
+        else
+          echo "Error: File gradlew (Gradle) tidak ditemukan di folder manapun di repositori ini."
+          echo "Pastikan Anda mengunggah seluruh folder proyek Android Studio Anda, bukan hanya file .kt saja."
+          exit 1
+        fi
         
